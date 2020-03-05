@@ -1,0 +1,33 @@
+{
+  "name": "food-plan-server",
+  "version": "1.0.0",
+  "description": "Food Plan Server",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_ENV=development && nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Team2-Hacktiv8/food-plan-server.git"
+  },
+  "keywords": [],
+  "author": "Team 2 Phase 2 Hacktiv8 Chrome Fox",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Team2-Hacktiv8/food-plan-server/issues"
+  },
+  "homepage": "https://github.com/Team2-Hacktiv8/food-plan-server#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "pg": "^7.18.2",
+    "sequelize": "^5.21.5"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0"
+  }
+}
