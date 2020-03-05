@@ -6,6 +6,6 @@ const { cookPlanRouter } = require('./cookPlanRouter');
 const { userRouter } = require('./userRouter');
 
 router.use('/cookplans', cookPlanRouter);
-router.use('/', userRouter);
+router.use('/users', userRouter);
 
 module.exports = { router }
