@@ -1,4 +1,5 @@
 const { User } = require('../models')
+const { comperePassword } = require('../helpers/hash')
 
 class UserController {
 
@@ -18,7 +19,22 @@ class UserController {
   }
 
   static login(req, res, next) {
-    
+    User.findOne({
+      where: {
+        email: req.body.email
+      }
+    })
+    .then((user) => {
+      if(user) {
+        let status = comperePassword(req.body.password, User.password)
+        if(status) {
+          
+        }
+      }
+      else {
+
+      }
+    })
   }
 
 }
