@@ -10,6 +10,9 @@ const { CookPlan, User } = require('../models')
 class CookPlanController {
     static showAll(req, res, next) {
         CookPlan.findAll({
+            where : {
+                UserId : req.currentUserId
+            },
             order: [['cooking_date', 'DESC']]
         }).then(plans => {
             res.status(200).json(plans);
