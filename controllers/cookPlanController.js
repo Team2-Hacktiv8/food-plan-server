@@ -2,8 +2,10 @@
 
 const axios = require ('axios').default ;
 const spoonacular = axios.create ({
-    baseURL: 'https://api.spoonacular.com/recipes'
+    baseURL: 'https://api.spoonacular.com/recipes',
 })
+
+const randomResto = require ('../helpers/randomResto')
 
 const { CookPlan, User } = require('../models')
 
@@ -20,14 +22,15 @@ class CookPlanController {
     }
     static createPlan(req, res, next) {
         const query = req.body.name.replace(/ /g, "+") ;
-        const key = process.env.SPOONACULAR_KEY ;
-        const UserId = req.currentUserId
+        const spoonacular_key = process.env.SPOONACULAR_KEY ;
+        const UserId = req.currentUserId ;
+        const recommendResto = randomResto()
 
-        spoonacular.get(`/search?query=${query}&number=1&apiKey=${key}`)
+        spoonacular.get(`/search?query=${query}&number=1&apiKey=${spoonacular_key}`)
         .then ((response)=>{
             const recipeId = response.data.results[0].id ;
 
-            return spoonacular.get(`/${recipeId}/information?apiKey=${key}`)
+            return spoonacular.get(`/${recipeId}/information?apiKey=${spoonacular_key}`)
         })
 
         .then ( (response) => {
@@ -37,6 +40,7 @@ class CookPlanController {
                 goal: req.body.goal,
                 cooking_date: req.body.cooking_date,
                 recipe_link : response.data.sourceUrl,
+                video_link : recommendResto,
                 status: req.body.status,
                 UserId : UserId
             }
