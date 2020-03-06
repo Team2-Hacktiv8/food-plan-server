@@ -12,7 +12,7 @@ router.use(authentication)
 
 router.get('/', CookPlanController.showAll);
 
-router.post('/', authorization, CookPlanController.createPlan);
+router.post('/', CookPlanController.createPlan);
 
 router.put('/:id', authorization, CookPlanController.updatePlan);
 
