@@ -21,6 +21,7 @@ class CookPlanController {
     static createPlan(req, res, next) {
         const query = req.body.name.replace(/ /g, "+") ;
         const key = process.env.SPOONACULAR_KEY ;
+        const UserId = req.currentUserId
 
         spoonacular.get(`/search?query=${query}&number=1&apiKey=${key}`)
         .then ((response)=>{
@@ -36,7 +37,8 @@ class CookPlanController {
                 goal: req.body.goal,
                 cooking_date: req.body.cooking_date,
                 recipe_link : response.data.sourceUrl,
-                status: req.body.status
+                status: req.body.status,
+                UserId : UserId
             }
 
             return CookPlan.create(payload).then(plan => {
