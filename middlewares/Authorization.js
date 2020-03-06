@@ -1,8 +1,9 @@
-const CookPlan = require('../models')
+const { CookPlan } = require('../models')
 
 function authorization(req, res, next) {
   CookPlan.findOne({
     where: {
+      id : req.params.id,
       UserId: req.currentUserId
     }
   })
