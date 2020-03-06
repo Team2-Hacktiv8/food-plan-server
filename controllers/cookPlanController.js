@@ -79,11 +79,11 @@ class CookPlanController {
         let deleteId = +req.params.id;
         CookPlan.findOne({
             where: {
-                id: updateId
+                id: deleteId
             }
         }).then(plan => {
             if (plan) {
-                return Plan.destroy(updateId)
+                return Plan.destroy(deleteId)
             } else {
                 throw new Error()
             }
