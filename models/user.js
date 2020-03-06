@@ -2,7 +2,7 @@
 const { hashPassword } = require('../helpers/hash')
 
 module.exports = (sequelize, DataTypes) => {
-  class User extends sequelize.Sequelize.Model{}
+  class User extends sequelize.Sequelize.Model { }
   User.init({
     email: {
       type: DataTypes.STRING,
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   }, {
-    hooks:{
+    hooks: {
       beforeCreate: (User, options) => {
         User.password = hashPassword(User.password)
       }
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User'
     // options
   });
-  User.associate = function(models) {
+  User.associate = function (models) {
     // associations can be defined here
     User.hasMany(models.CookPlan)
   };
