@@ -3,9 +3,9 @@ const { verify } = require('../helpers/token')
 
 function authentication(req, res, next) {
  try{
-  if(req.header.token) {
-    let decode = verify(req.header.token)
-    req.currentUserId = decode.id
+  if(req.headers.token) {
+    let decoded = verify(req.headers.token)
+    req.currentUserId = decoded.id
     User.findByPk(
       req.currentUserId
     )
