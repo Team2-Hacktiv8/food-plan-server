@@ -13,7 +13,10 @@ function randomResto () {
     zomato.get(`https://developers.zomato.com/api/v2.1//search?entity_id=74&entity_type=city`)
 
         .then ( (response) => {
-            return response.data.restaurants[index].restaurant.url
+            // console.log(response.data.restaurants[index].restaurant.url)
+            const recommendResto = response.data.restaurants[index].restaurant.url ;
+
+            return recommendResto
         })
 
         .catch ( (err)=> {
@@ -21,5 +24,7 @@ function randomResto () {
         })
 }
 
-module.exports = randomResto
+// module.exports = randomResto
 
+
+console.log(randomResto());

@@ -5,7 +5,16 @@ const spoonacular = axios.create ({
     baseURL: 'https://api.spoonacular.com/recipes',
 })
 
-const randomResto = require ('../helpers/randomResto')
+const zomato = axios.create ({
+    headers : {
+        "user-key" : "566dcb269c08eada33d28bdc14503b8f"
+    }
+})
+
+let recommendResto ;
+let index = Math.round(Math.random()*15)
+
+// const randomResto = require ('../helpers/randomResto')
 
 const { CookPlan, User } = require('../models')
 
@@ -24,10 +33,19 @@ class CookPlanController {
         const query = req.body.name.replace(/ /g, "+") ;
         const spoonacular_key = process.env.SPOONACULAR_KEY ;
         const UserId = req.currentUserId ;
-        const recommendResto = randomResto()
+        // const recommendResto = randomResto() 
 
-        spoonacular.get(`/search?query=${query}&number=1&apiKey=${spoonacular_key}`)
-        .then ((response)=>{
+        zomato.get(`https://developers.zomato.com/api/v2.1//search?entity_id=74&entity_type=city`)
+
+        .then ( (response) => {
+            
+            recommendResto = response.data.restaurants[index].restaurant.url ;
+
+            return spoonacular.get(`/search?query=${query}&number=1&apiKey=${spoonacular_key}`)
+        })
+
+        .then ((response) =>{
+
             const recipeId = response.data.results[0].id ;
 
             return spoonacular.get(`/${recipeId}/information?apiKey=${spoonacular_key}`)
@@ -50,7 +68,9 @@ class CookPlanController {
             }).catch(next)
         })
 
-        .catch(next)
+        .catch((err)=>{
+            console.log(err);
+        })
 
     }
 
