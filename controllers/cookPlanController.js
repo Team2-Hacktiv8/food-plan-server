@@ -64,7 +64,7 @@ class CookPlanController {
             }
         }).then(result => {
             if (result) {
-                return Plan.findOne({
+                return CookPlan.findOne({
                     where: {
                         id: updateId
                     }
@@ -83,11 +83,20 @@ class CookPlanController {
             }
         }).then(plan => {
             if (plan) {
-                return Plan.destroy(deleteId)
+                return CookPlan.destroy( {
+                    where : {
+                        id : deleteId
+                    }
+                })
             } else {
                 throw new Error()
             }
-        }).then(plan => { res.status(200) }).catch(next)
+        }).then(plan => {
+            res.status(200).json({
+                message : 'deleted'
+            })
+        })
+        .catch(next)
     }
 }
 
