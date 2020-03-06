@@ -2,8 +2,19 @@
 
 const axios = require ('axios').default ;
 const spoonacular = axios.create ({
-    baseURL: 'https://api.spoonacular.com/recipes'
+    baseURL: 'https://api.spoonacular.com/recipes',
 })
+
+const zomato = axios.create ({
+    headers : {
+        "user-key" : "566dcb269c08eada33d28bdc14503b8f"
+    }
+})
+
+let recommendResto ;
+let index = Math.round(Math.random()*15)
+
+// const randomResto = require ('../helpers/randomResto')
 
 const { CookPlan, User } = require('../models')
 
@@ -20,14 +31,24 @@ class CookPlanController {
     }
     static createPlan(req, res, next) {
         const query = req.body.name.replace(/ /g, "+") ;
-        const key = process.env.SPOONACULAR_KEY ;
-        const UserId = req.currentUserId
+        const spoonacular_key = process.env.SPOONACULAR_KEY ;
+        const UserId = req.currentUserId ;
+        // const recommendResto = randomResto() 
 
-        spoonacular.get(`/search?query=${query}&number=1&apiKey=${key}`)
-        .then ((response)=>{
+        zomato.get(`https://developers.zomato.com/api/v2.1//search?entity_id=74&entity_type=city`)
+
+        .then ( (response) => {
+            
+            recommendResto = response.data.restaurants[index].restaurant.url ;
+
+            return spoonacular.get(`/search?query=${query}&number=1&apiKey=${spoonacular_key}`)
+        })
+
+        .then ((response) =>{
+
             const recipeId = response.data.results[0].id ;
 
-            return spoonacular.get(`/${recipeId}/information?apiKey=${key}`)
+            return spoonacular.get(`/${recipeId}/information?apiKey=${spoonacular_key}`)
         })
 
         .then ( (response) => {
@@ -37,6 +58,7 @@ class CookPlanController {
                 goal: req.body.goal,
                 cooking_date: req.body.cooking_date,
                 recipe_link : response.data.sourceUrl,
+                video_link : recommendResto,
                 status: req.body.status,
                 UserId : UserId
             }
@@ -46,7 +68,9 @@ class CookPlanController {
             }).catch(next)
         })
 
-        .catch(next)
+        .catch((err)=>{
+            console.log(err);
+        })
 
     }
 
